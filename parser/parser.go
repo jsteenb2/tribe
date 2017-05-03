@@ -1,4 +1,4 @@
-package eyeTribeParser
+package parser
 
 import (
 	"encoding/json"
@@ -20,10 +20,6 @@ func ParseFile(filename string) {
 		panic(err)
 	}
 	parsedContent := strings.SplitAfter(string(f), "} ")
-	stringifyCollection(parsedContent)
-}
-
-func stringifyCollection(parsedContent []string) {
 	parseTracker(parsedContent)
 	parseHeartbeat(parsedContent)
 }

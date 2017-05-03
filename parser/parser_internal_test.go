@@ -1,4 +1,4 @@
-package eyeTribeParser
+package parser
 
 import (
 	"testing"
@@ -14,5 +14,7 @@ func TestParseFile(t *testing.T) {
 
 	assert.Equal("tracker", result.Category, "should be equal")
 	assert.Equal(200, result.Statuscode, "status code should be 200")
-	assert.IsType("string", result.Values.Frame.Timestamp, "expecte tiemstamp to be a string")
+
+	var string string
+	assert.IsType(string, result.Values.Frame.Timestamp, "expecte tiemstamp to be a string")
 }
