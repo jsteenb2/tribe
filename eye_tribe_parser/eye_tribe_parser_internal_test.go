@@ -2,14 +2,17 @@ package eyeTribeParser
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseFile(t *testing.T) {
+	assert := assert.New(t)
 	ParseFile("../test.json")
-	if Tracker[0].Category != "tracker" {
-		t.Error("Expected category to equal tracker")
-	}
-	if Tracker[0].Statuscode != 200 {
-		t.Error("Expected status code to equal 200")
-	}
+
+	result := Tracker[0]
+
+	assert.Equal("tracker", result.Category, "should be equal")
+	assert.Equal(200, result.Statuscode, "status code should be 200")
+	assert.IsType("string", result.Values.Frame.Timestamp, "expecte tiemstamp to be a string")
 }
