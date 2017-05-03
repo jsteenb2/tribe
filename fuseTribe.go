@@ -1,5 +1,0 @@
-package fusetribe
-
-func main() {
-
-}
