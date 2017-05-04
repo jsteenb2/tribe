@@ -1,0 +1,14 @@
+mode: set
+tribe/parser/parser.go:17.33,19.16 2 1
+tribe/parser/parser.go:22.2,24.31 3 1
+tribe/parser/parser.go:19.16,20.13 1 0
+tribe/parser/parser.go:27.43,28.31 1 1
+tribe/parser/parser.go:28.31,31.17 3 1
+tribe/parser/parser.go:34.3,34.43 1 1
+tribe/parser/parser.go:31.17,33.4 1 0
+tribe/parser/parser.go:34.43,38.4 3 1
+tribe/parser/parser.go:42.45,43.31 1 1
+tribe/parser/parser.go:43.31,46.17 3 1
+tribe/parser/parser.go:49.3,49.45 1 1
+tribe/parser/parser.go:46.17,48.4 1 0
+tribe/parser/parser.go:49.45,53.4 3 1

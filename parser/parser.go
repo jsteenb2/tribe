@@ -10,10 +10,13 @@ import (
 )
 
 var (
-	Tracker   []tracker
+	// Tracker is the collection of tracker data for each time frame
+	Tracker []tracker
+	// Heartbeat is the collection of heartbeat data and checks for connectivity
 	Heartbeat []heartbeat
 )
 
+// ParseFile parses the eye-tribe output data, akin to JSON without the proper formatting
 func ParseFile(filename string) {
 	f, err := ioutil.ReadFile(filename)
 	if err != nil {
