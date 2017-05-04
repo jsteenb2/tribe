@@ -12,23 +12,21 @@ func CreateHeatMap() {
 	dw := imagick.NewDrawingWand()
 	cw := imagick.NewPixelWand()
 
-	diameter := uint(75)
+	diameter := uint(500)
 	radius := float64(diameter / 2)
 
 	cw.SetColor("transparent")
-	mw.NewImage(1000, 1000, cw)
-
-	dw.SetStrokeOpacity(0.5)
+	mw.NewImage(500, 500, cw)
 
 	dw.PushDrawingWand()
 
 	cw.SetColor("red")
+	cw.SetAlpha(0.5)
+
 	dw.SetStrokeColor(cw)
-	dw.SetStrokeWidth(4)
+	dw.SetStrokeWidth(1)
 	dw.SetStrokeAntialias(true)
 
-	cw.SetColor("red")
-	dw.SetFillOpacity(0.5)
 	dw.SetFillColor(cw)
 	dw.Circle(radius, radius, radius, radius*2)
 
