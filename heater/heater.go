@@ -13,7 +13,7 @@ func CreateHeatMap(filename string, coords ViewerInterface, video VideoInterface
 
 	mw := buildImage(video)
 	mw.DrawImage(dw)
-	mw.WriteImage("~/go/src/tribe/heater/imgs/" + filename + ".png")
+	mw.WriteImage("/Users/jonathansteenbergen/go/src/tribe/heater/imgs/" + filename + ".png")
 }
 
 func buildDrawing(coords ViewerInterface) *imagick.DrawingWand {

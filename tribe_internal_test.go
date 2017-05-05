@@ -1,18 +1,12 @@
 package tribe
 
 import (
-	"strconv"
 	"testing"
-	"tribe/heater"
-	"tribe/parser"
 )
 
 func TestMain(t *testing.T) {
 	video := videoData{Height: 1050, Width: 1680}
-	parser.ParseFile("test.json")
-	for i, tracker := range parser.Tracker {
-		heater.CreateHeatMap(strconv.FormatInt(int64(i), 10), tracker, video)
-	}
+	Runner(video)
 }
 
 type videoData struct {
