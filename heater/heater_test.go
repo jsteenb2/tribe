@@ -1,14 +1,24 @@
 package heater_test
 
 import (
+	"fmt"
+	"strconv"
 	"testing"
 	"tribe/heater"
 )
 
 func TestCreateHeatMap(t *testing.T) {
-	coords := eyeData{X: 800.0, Y: 600.0}
+	// coords := eyeData{X: 800.0, Y: 600.0}
+	var coords eyeData
 	video := videoData{Height: 1000, Width: 1000}
-	heater.CreateHeatMap("0", coords, video)
+
+	for i := int64(0); i < 5; i++ {
+		x := float64(i) * 200.0
+		y := float64(i) * 200.0
+		coords = eyeData{X: x, Y: y}
+		fmt.Println(int64(i), strconv.FormatInt(i, 10))
+		heater.CreateHeatMap(strconv.FormatInt(i, 10), coords, video)
+	}
 }
 
 type eyeData struct {
