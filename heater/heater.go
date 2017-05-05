@@ -5,7 +5,7 @@ import (
 )
 
 // CreateHeatMap creates a png image with coordinates from viewers gaze, fixation, and the the Video details
-func CreateHeatMap(coords ViewerInterface, video VideoInterface) {
+func CreateHeatMap(filename string, coords ViewerInterface, video VideoInterface) {
 	imagick.Initialize()
 	defer imagick.Terminate()
 
@@ -13,7 +13,7 @@ func CreateHeatMap(coords ViewerInterface, video VideoInterface) {
 
 	mw := buildImage(video)
 	mw.DrawImage(dw)
-	mw.WriteImage("imgs/chart_test.png")
+	mw.WriteImage("imgs/" + filename + ".png")
 }
 
 func buildDrawing(coords ViewerInterface) *imagick.DrawingWand {

@@ -8,7 +8,7 @@ import (
 func TestCreateHeatMap(t *testing.T) {
 	coords := eyeData{X: 800.0, Y: 600.0}
 	video := videoData{Height: 1000, Width: 1000}
-	heater.CreateHeatMap(coords, video)
+	heater.CreateHeatMap("0", coords, video)
 }
 
 type eyeData struct {
