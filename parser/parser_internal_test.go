@@ -17,4 +17,8 @@ func TestParseFile(t *testing.T) {
 
 	var string string
 	assert.IsType(string, result.Values.Frame.Timestamp, "expecte tiemstamp to be a string")
+
+	assert.Equal(303, len(Tracker), "Expected 303 tracker data points")
+
+	assert.Equal(11, len(Heartbeat), "Expected 13 tracker data points")
 }
