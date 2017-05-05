@@ -62,6 +62,7 @@ type heartbeat struct {
 	Statuscode int
 }
 
+// View struct is the data structure for the JSON pertaining to the eye tribe API output
 type View struct {
 	Category   string
 	Statuscode int
@@ -75,7 +76,7 @@ type frame struct {
 type eyeData struct {
 	Timestamp string
 	Time      int
-	fix       bool
+	Fix       bool
 	State     int
 	Raw       xyCoordFloat
 	Avg       xyCoordFloat
@@ -90,12 +91,27 @@ type eyeValue struct {
 	Pcenter xyCoordFloat
 }
 
-// type xyCoordInt struct {
-// 	X int
-// 	Y int
-// }
-
 type xyCoordFloat struct {
 	X float64
 	Y float64
+}
+
+// GetXCoord returns Avg X value for eye view
+func (v View) GetXCoord() float64 {
+	return v.Values.Frame.Avg.X
+}
+
+// GetYCoord returns Avg Y value for eye view
+func (v View) GetYCoord() float64 {
+	return v.Values.Frame.Avg.Y
+}
+
+// IsFixed returns status of fixation during interval
+func (v View) IsFixed() bool {
+	return v.Values.Frame.Fix
+}
+
+// Duration returns length of image render
+func (v View) Duration(nextTime int) int {
+	return nextTime - v.Values.Frame.Time
 }
