@@ -11,7 +11,7 @@ import (
 
 var (
 	// Tracker is the collection of tracker data for each time frame
-	Tracker []tracker
+	Tracker []View
 	// Heartbeat is the collection of heartbeat data and checks for connectivity
 	Heartbeat []heartbeat
 )
@@ -35,7 +35,7 @@ func parseTracker(parsedContent []string) {
 			log.Fatal(err)
 		}
 		if trackerData["category"] == "tracker" {
-			var result tracker
+			var result View
 			mapstructure.Decode(trackerData, &result)
 			Tracker = append(Tracker, result)
 		}
@@ -62,7 +62,7 @@ type heartbeat struct {
 	Statuscode int
 }
 
-type tracker struct {
+type View struct {
 	Category   string
 	Statuscode int
 	Values     frame
