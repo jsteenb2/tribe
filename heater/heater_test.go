@@ -8,7 +8,6 @@ import (
 )
 
 func TestCreateHeatMap(t *testing.T) {
-	// coords := eyeData{X: 800.0, Y: 600.0}
 	var coords eyeData
 	video := videoData{Height: 1000, Width: 1000}
 
