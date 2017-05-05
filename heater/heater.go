@@ -1,16 +1,25 @@
 package heater
 
 import (
+	"strconv"
+	"tribe/parser"
+
 	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
-// CreateHeatMap creates a png image with coordinates from viewers gaze, fixation, and the the Video details
-func CreateHeatMap(filename string, coords ViewerInterface, video VideoInterface) {
+// CreateHeatMaps creates a series of png images with coordinates from viewers gaze, fixation, and the the Video details
+func CreateHeatMaps(trackerData []parser.View, video VideoInterface) {
 	imagick.Initialize()
 	defer imagick.Terminate()
 
-	dw := buildDrawing(coords)
+	for i, tracker := range trackerData {
+		CreateHeatMap(strconv.FormatInt(int64(i), 10), tracker, video)
+	}
+}
 
+// CreateHeatMap generates a single png image that maps the viewers gaze to the screen
+func CreateHeatMap(filename string, coords ViewerInterface, video VideoInterface) {
+	dw := buildDrawing(coords)
 	mw := buildImage(video)
 	mw.DrawImage(dw)
 	mw.WriteImage("/Users/jonathansteenbergen/go/src/tribe/heater/imgs/" + filename + ".png")

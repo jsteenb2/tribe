@@ -6,7 +6,7 @@ import (
 
 func TestMain(t *testing.T) {
 	video := videoData{Height: 1050, Width: 1680}
-	Runner(video)
+	Runner(video, "test.json")
 }
 
 type videoData struct {
