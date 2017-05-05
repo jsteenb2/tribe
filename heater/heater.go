@@ -4,32 +4,62 @@ import (
 	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
-func CreateHeatMap() {
+// CreatHeatMap creates a png image with coordinates from viewers gaze, fixation, and
+// the the Video details
+func CreateHeatMap(coords ViewerInterface, video VideoInterface) {
 	imagick.Initialize()
 	defer imagick.Terminate()
 
-	mw := imagick.NewMagickWand()
-	dw := imagick.NewDrawingWand()
-	cw := imagick.NewPixelWand()
+	dw := buildDrawing(coords)
 
-	diameter := uint(500)
-	radius := float64(diameter / 2)
-
-	cw.SetColor("transparent")
-	mw.NewImage(500, 500, cw)
-
-	dw.PushDrawingWand()
-
-	cw.SetColor("red")
-	cw.SetAlpha(0.5)
-
-	dw.SetStrokeColor(cw)
-	dw.SetStrokeWidth(1)
-	dw.SetStrokeAntialias(true)
-
-	dw.SetFillColor(cw)
-	dw.Circle(radius, radius, radius, radius*2)
-
+	mw := buildImage(video)
 	mw.DrawImage(dw)
 	mw.WriteImage("chart_test.png")
+}
+
+func buildDrawing(coords ViewerInterface) *imagick.DrawingWand {
+	radius := 35.0
+	dw := imagick.NewDrawingWand()
+	dw.PushDrawingWand()
+	dw.SetStrokeColor(setColor(coords))
+	dw.SetStrokeWidth(1)
+	dw.SetStrokeAntialias(true)
+	dw.SetStrokeLineCap(imagick.LINE_CAP_ROUND)
+	dw.SetStrokeLineJoin(imagick.LINE_JOIN_ROUND)
+	dw.SetFillColor(setColor(coords))
+	dw.RoundRectangle(coords.GetXCoord(), coords.GetYCoord(), 2*radius+coords.GetXCoord(), 2*radius+coords.GetYCoord(), 2*radius, 2*radius)
+
+	return dw
+}
+
+func buildImage(video VideoInterface) *imagick.MagickWand {
+	mw := imagick.NewMagickWand()
+	cw := imagick.NewPixelWand()
+	cw.SetColor("transparent")
+	mw.NewImage(video.GetWidth(), video.GetHeight(), cw)
+	return mw
+}
+
+func setColor(coords ViewerInterface) *imagick.PixelWand {
+	cw := imagick.NewPixelWand()
+	if coords.IsFixed() {
+		cw.SetColor("rgb(255,0,0)")
+	} else {
+		cw.SetColor("rgb(147, 21, 136)")
+	}
+	cw.SetAlpha(0.5)
+	return cw
+}
+
+// ViewerInterface is struct with info about an image file
+type ViewerInterface interface {
+	GetXCoord() float64
+	GetYCoord() float64
+	IsFixed() bool
+}
+
+// VideoInterface
+type VideoInterface interface {
+	GetHeight() uint
+	GetWidth() uint
 }
