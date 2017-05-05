@@ -4,8 +4,7 @@ import (
 	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
-// CreatHeatMap creates a png image with coordinates from viewers gaze, fixation, and
-// the the Video details
+// CreateHeatMap creates a png image with coordinates from viewers gaze, fixation, and the the Video details
 func CreateHeatMap(coords ViewerInterface, video VideoInterface) {
 	imagick.Initialize()
 	defer imagick.Terminate()
@@ -14,7 +13,7 @@ func CreateHeatMap(coords ViewerInterface, video VideoInterface) {
 
 	mw := buildImage(video)
 	mw.DrawImage(dw)
-	mw.WriteImage("chart_test.png")
+	mw.WriteImage("imgs/chart_test.png")
 }
 
 func buildDrawing(coords ViewerInterface) *imagick.DrawingWand {
@@ -58,7 +57,7 @@ type ViewerInterface interface {
 	IsFixed() bool
 }
 
-// VideoInterface
+// VideoInterface is the interface that maps to an input video file
 type VideoInterface interface {
 	GetHeight() uint
 	GetWidth() uint
