@@ -2,7 +2,9 @@ package videoer
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"os/exec"
 	"strconv"
 	"tribe/parser"
 )
@@ -13,6 +15,7 @@ func CreateHeatmapVideo(video VideoInterface, trackerData []parser.View) {
 	height := video.GetHeight()
 	f := createFile(trackerData)
 	fmt.Println(width, height, f.Path)
+	createVideo()
 	// pass file to ffmpeg command
 	// delete the temp text file
 }
@@ -45,6 +48,17 @@ func getDuration(index, length int, current parser.View, trackerData []parser.Vi
 	}
 	next := trackerData[index+1]
 	return strconv.FormatFloat((next.Duration()-current.Duration())/1000, 'f', -1, 64)
+}
+
+func createVideo() {
+	filename := "/Users/jonathansteenbergen/go/src/tribe/videoer/gen_video.sh"
+	if err := os.Chmod(filename, 0700); err != nil {
+		log.Fatal(err)
+	}
+	_, err := exec.Command("/bin/sh", filename).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 type InputFile struct {
