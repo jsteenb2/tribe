@@ -75,7 +75,7 @@ type frame struct {
 
 type eyeData struct {
 	Timestamp string
-	Time      int
+	Time      float64
 	Fix       bool
 	State     int
 	Raw       xyCoordFloat
@@ -112,6 +112,6 @@ func (v View) IsFixed() bool {
 }
 
 // Duration returns length of image render
-func (v View) Duration(nextTime int) int {
-	return nextTime - v.Values.Frame.Time
+func (v View) Duration() float64 {
+	return v.Values.Frame.Time
 }
