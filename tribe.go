@@ -14,6 +14,7 @@ func Runner(video VideoInterface, jsonFilename string) {
 	heater.CreateHeatMaps(parser.Tracker, video)
 }
 
+// VideoInterface represents interface for giving video information to the inputs
 type VideoInterface interface {
 	GetHeight() uint
 	GetWidth() uint
