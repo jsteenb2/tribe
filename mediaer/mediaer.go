@@ -2,14 +2,15 @@ package mediaer
 
 import (
 	"bytes"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
 )
 
-func Probe(filename string) Video {
-	args := []string{"-v", "error", "-of", "flat=s=_", "-select_streams", "v:0", "-show_entries", "stream=height,width", filename}
-	cmd := exec.Command("/usr/local/bin/ffprobe", args...)
+func Probe(path string) Video {
+	args := []string{"-v", "error", "-of", "flat=s=_", "-select_streams", "v:0", "-show_entries", "stream=height,width", path}
+	cmd := exec.Command(ffprobeLocation(), args...)
 
 	var buf bytes.Buffer
 	cmd.Stdout = &buf
@@ -19,6 +20,7 @@ func Probe(filename string) Video {
 	return Video{
 		Height: GetSize("height", resolution),
 		Width:  GetSize("width", resolution),
+		Path:   path,
 	}
 }
 
@@ -37,6 +39,16 @@ func GetSize(parameter string, feed []string) uint64 {
 	return output
 }
 
+func ffprobeLocation() string {
+	path := "/usr/local/bin/ffprobe"
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		must(err)
+	}
+
+	return path
+}
+
 func must(err error) {
 	if err != nil {
 		panic(err)
@@ -46,12 +58,5 @@ func must(err error) {
 type Video struct {
 	Height uint64
 	Width  uint64
-}
-
-func (v Video) GetHeight() uint {
-	return uint(v.Height)
-}
-
-func (v Video) GetWidth() uint {
-	return uint(v.Width)
+	Path   string
 }
