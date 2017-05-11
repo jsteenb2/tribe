@@ -18,20 +18,20 @@ func Probe(path string) Video {
 	resolution := strings.Split(buf.String(), "\n")[:2]
 
 	return Video{
-		Height: GetSize("height", resolution),
-		Width:  GetSize("width", resolution),
+		Height: GetHeight(resolution),
+		Width:  GetWidth(resolution),
 		Path:   path,
 	}
 }
 
-func GetSize(parameter string, feed []string) uint64 {
+func GetHeight(feed []string) uint64 {
 	var (
 		output uint64
 		err    error
 	)
 	for _, v := range feed {
-		if strings.Contains(v, parameter+"=") {
-			sizeParam := strings.Split(v, parameter+"=")[1]
+		if strings.Contains(v, "height=") {
+			sizeParam := strings.Split(v, "height=")[1]
 			output, err = strconv.ParseUint(sizeParam, 10, 64)
 			must(err)
 		}
@@ -39,6 +39,20 @@ func GetSize(parameter string, feed []string) uint64 {
 	return output
 }
 
+func GetWidth(feed []string) uint64 {
+	var (
+		output uint64
+		err    error
+	)
+	for _, v := range feed {
+		if strings.Contains(v, "width=") {
+			sizeParam := strings.Split(v, "width=")[1]
+			output, err = strconv.ParseUint(sizeParam, 10, 64)
+			must(err)
+		}
+	}
+	return output
+}
 func ffprobeLocation() string {
 	path := "/usr/local/bin/ffprobe"
 	_, err := os.Stat(path)

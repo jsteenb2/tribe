@@ -6,7 +6,7 @@ import (
 )
 
 func TestProbe(t *testing.T) {
-	video := mediaer.Probe("/Users/jonathansteenbergen/go/src/tribe/output.mp4")
+	video := mediaer.Probe("/Users/jonathansteenbergen/go/src/tribe/test_output.mp4")
 	if video.Height != 1050 {
 		t.Errorf("expected height to be `1050` got %d", video.Height)
 	}
@@ -16,15 +16,19 @@ func TestProbe(t *testing.T) {
 	}
 }
 
-func TestGetSize(t *testing.T) {
+func TestGetHeight(t *testing.T) {
 	sample := []string{"streams_stream_0_width=1680", "streams_stream_0_height=1050"}
 
-	height := mediaer.GetSize("height", sample)
+	height := mediaer.GetHeight(sample)
 	if height != 1050 {
 		t.Errorf("expected height to be `1050` got %d", height)
 	}
+}
 
-	width := mediaer.GetSize("width", sample)
+func TestGetWidth(t *testing.T) {
+	sample := []string{"streams_stream_0_width=1680", "streams_stream_0_height=1050"}
+
+	width := mediaer.GetWidth(sample)
 	if width != 1680 {
 		t.Errorf("expected width to be `1680` got %d", width)
 	}
