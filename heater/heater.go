@@ -14,11 +14,17 @@ func CreateHeatMaps(trackerData []parser.View, video VideoInterface) {
 	defer imagick.Terminate()
 
 	var wg sync.WaitGroup
+	concurrency := 15
+	sem := make(chan bool, concurrency)
 
 	for i, tracker := range trackerData {
 		wg.Add(1)
+		sem <- true
 		go func(i int64, track parser.View, video VideoInterface) {
-			defer wg.Done()
+			defer func() {
+				<-sem
+				wg.Done()
+			}()
 			CreateHeatMap(strconv.FormatInt(i, 10), track, video)
 		}(int64(i), tracker, video)
 	}
