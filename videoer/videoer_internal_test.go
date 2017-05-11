@@ -5,21 +5,15 @@ import (
 	"tribe/parser"
 )
 
-func TestCreateHeatmapVideo(t *testing.T) {
-	video := videoData{Height: 1050, Width: 1680}
+func TestFFMPEGImgsToVideo(t *testing.T) {
 	parser.ParseFile("../test.json")
-	CreateHeatmapVideo(video, parser.Tracker)
-}
-
-type videoData struct {
-	Height int
-	Width  int
-}
-
-func (v videoData) GetHeight() uint {
-	return uint(v.Height)
-}
-
-func (v videoData) GetWidth() uint {
-	return uint(v.Width)
+	f := CreateFile(parser.Tracker)
+	ffmpeg := &FFMPEG{
+		Command:   "-f concat -safe 0 -i",
+		Input:     f.Path,
+		PixFmt:    "yuv420p",
+		Vsync:     "vfr",
+		Overwrite: true,
+	}
+	ffmpeg.ImgsToVideo("/Users/jonathansteenbergen/go/src/tribe/output.mp4")
 }
