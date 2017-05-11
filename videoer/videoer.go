@@ -1,35 +1,18 @@
 package videoer
 
 import (
-	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 	"tribe/parser"
 )
 
-// CreateHeatmapVideo creates a video fo genreated heatmap imgs with corresponding times
-func CreateHeatmapVideo(video VideoInterface, trackerData []parser.View) {
-	width := video.GetWidth()
-	height := video.GetHeight()
-	f := createFile(trackerData)
-	fmt.Println(width, height, f.Path)
-	createVideo()
-	// pass file to ffmpeg command
-	// delete the temp text file
-}
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func createFile(trackerData []parser.View) InputFile {
+// CreateFile creates input file to use in FFMPEG concat function to build the output video
+func CreateFile(trackerData []parser.View) InputFile {
 	inputFile := InputFile{Path: "/Users/jonathansteenbergen/go/src/tribe/input.txt"}
 	f, err := os.Create(inputFile.Path)
-	check(err)
+	must(err)
 	defer f.Close()
 
 	trackerLength := len(trackerData)
@@ -50,22 +33,63 @@ func getDuration(index, length int, current parser.View, trackerData []parser.Vi
 	return strconv.FormatFloat((next.Duration()-current.Duration())/1000, 'f', -1, 64)
 }
 
-func createVideo() {
-	filename := "/Users/jonathansteenbergen/go/src/tribe/videoer/gen_video.sh"
-	if err := os.Chmod(filename, 0700); err != nil {
-		log.Fatal(err)
+// FFMPEG struct for creaeting FFMPEG img to video CLI interface
+type FFMPEG struct {
+	Command   string  `json:"command"`
+	Scale     float64 `json:"scale"`
+	PixFmt    string  `json:"pix_fmt"`
+	Input     string  `json:"input"`
+	Vsync     string  `json:"vsync"`
+	Overwrite bool    `json:"overwrite"`
+}
+
+// ImgsToVideo creates video from heatmap images
+func (ff *FFMPEG) ImgsToVideo(output string) {
+	cmd := exec.Command(ffmpegLocation(), ff.buildArguments(output)...)
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	must(cmd.Run())
+}
+
+func (ff *FFMPEG) buildArguments(output string) []string {
+	args := strings.Split(ff.Command, " ")
+	args = append(args, ff.Input)
+	if ff.Vsync != "" {
+		args = append(args, "-vsync", ff.Vsync)
 	}
-	_, err := exec.Command("/bin/sh", filename).Output()
+	if ff.PixFmt != "" {
+		args = append(args, "-pix_fmt", ff.PixFmt)
+	}
+	args = append(args, output, ff.formatOverwrite())
+	return args
+}
+
+func (ff *FFMPEG) formatOverwrite() string {
+	var agreement string
+	if ff.Overwrite == true {
+		agreement = "-y"
+	}
+	return agreement
+}
+
+func ffmpegLocation() string {
+	path := "/usr/local/bin/ffmpeg"
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		must(err)
+	}
+
+	return path
+}
+
+func must(err error) {
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
 
+// InputFile is representative of file that is created from tracker data
+// Relates the images to duration need to map the video to the other video
 type InputFile struct {
 	Path string
-}
-
-type VideoInterface interface {
-	GetHeight() uint
-	GetWidth() uint
 }

@@ -9,7 +9,7 @@ import (
 
 func TestCreateHeatMap(t *testing.T) {
 	var coords eyeData
-	video := videoData{Height: 1000, Width: 1000}
+	video := videoData{Height: 1680, Width: 1050}
 
 	for i := int64(0); i < 5; i++ {
 		x := float64(i) * 200.0
