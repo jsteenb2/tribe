@@ -21,5 +21,3 @@ func (v videoData) GetHeight() uint {
 func (v videoData) GetWidth() uint {
 	return uint(v.Width)
 }
-
-// /Users/jonathansteenbergen/async/eye_tracker/imgs/one_min_test.mp4
