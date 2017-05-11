@@ -2,6 +2,7 @@ package heater
 
 import (
 	"strconv"
+	"sync"
 	"tribe/parser"
 
 	"gopkg.in/gographics/imagick.v2/imagick"
@@ -12,9 +13,17 @@ func CreateHeatMaps(trackerData []parser.View, video VideoInterface) {
 	imagick.Initialize()
 	defer imagick.Terminate()
 
+	var wg sync.WaitGroup
+
 	for i, tracker := range trackerData {
-		CreateHeatMap(strconv.FormatInt(int64(i), 10), tracker, video)
+		wg.Add(1)
+		go func(i int64, track parser.View, video VideoInterface) {
+			defer wg.Done()
+			CreateHeatMap(strconv.FormatInt(i, 10), track, video)
+		}(int64(i), tracker, video)
 	}
+
+	wg.Wait()
 }
 
 // CreateHeatMap generates a single png image that maps the viewers gaze to the screen
