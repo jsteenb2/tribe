@@ -2,10 +2,24 @@ package heater_test
 
 import (
 	"fmt"
+	"math/rand"
 	"strconv"
 	"testing"
 	"tribe/heater"
 )
+
+func BenchmarkCreateHeatMap(b *testing.B) {
+	var coords eyeData
+	r := rand.New(rand.NewSource(1050))
+	video := videoData{Height: 1680, Width: 1050}
+
+	for n := 0; n < b.N; n++ {
+		x := r.Float64() * 1050
+		y := r.Float64() * 1050
+		coords = eyeData{X: x, Y: y}
+		heater.CreateHeatMap(strconv.FormatInt(int64(n), 10), coords, video)
+	}
+}
 
 func TestCreateHeatMap(t *testing.T) {
 	var coords eyeData
